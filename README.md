@@ -32,5 +32,6 @@ npm run preview
 연락처, 위치, SNS, 사업자 정보는 아직 비어 있습니다.
 페이지의 「연락처를 입력해 주세요」 같은 문구를 실제 정보로 바꿔 주세요.
 문의 폼은 전송 서버에 연결되어 있지 않습니다.
+「만든 앱들」 섹션은 스튜디오와 별개인 다른 제품 자리이며, 이름·소개는 플레이스홀더입니다.
 
 Contact, location, social, and business fields are labeled placeholders only.
