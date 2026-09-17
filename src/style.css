@@ -444,14 +444,6 @@ textarea {
   line-height: 1.7;
 }
 
-.card-index {
-  font-size: 0.75rem;
-  font-weight: 650;
-  letter-spacing: 0.14em;
-  color: var(--ink-muted);
-  margin-bottom: 0.85rem;
-}
-
 .apps {
   background: var(--bg-soft);
   border-block: 1px solid var(--line);
