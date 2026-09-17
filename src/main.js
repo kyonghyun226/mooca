@@ -1,8 +1,7 @@
 import './style.css'
 
-const header = document.querySelector('[data-header]')
-const menuToggle = document.querySelector('[data-menu-toggle]')
-const mobileNav = document.querySelector('[data-mobile-nav]')
+const toggle = document.querySelector('[data-menu-toggle]')
+const panel = document.querySelector('[data-mobile-nav]')
 const form = document.querySelector('[data-contact-form]')
 const formStatus = document.querySelector('[data-form-status]')
 const year = document.querySelector('[data-year]')
@@ -11,26 +10,20 @@ if (year) {
   year.textContent = String(new Date().getFullYear())
 }
 
-const setHeaderState = () => {
-  header?.classList.toggle('is-scrolled', window.scrollY > 8)
-}
-
-setHeaderState()
-window.addEventListener('scroll', setHeaderState, { passive: true })
-
 const setMenuOpen = (open) => {
-  if (!menuToggle || !mobileNav) return
-  menuToggle.setAttribute('aria-expanded', String(open))
-  mobileNav.hidden = !open
+  if (!toggle || !panel) return
+  toggle.setAttribute('aria-expanded', String(open))
+  toggle.setAttribute('aria-label', open ? '메뉴 닫기' : '메뉴 열기')
+  panel.hidden = !open
   document.body.classList.toggle('is-menu-open', open)
 }
 
-menuToggle?.addEventListener('click', () => {
-  const expanded = menuToggle.getAttribute('aria-expanded') === 'true'
-  setMenuOpen(!expanded)
+toggle?.addEventListener('click', () => {
+  const open = toggle.getAttribute('aria-expanded') === 'true'
+  setMenuOpen(!open)
 })
 
-mobileNav?.querySelectorAll('a').forEach((link) => {
+panel?.querySelectorAll('a').forEach((link) => {
   link.addEventListener('click', () => setMenuOpen(false))
 })
 
