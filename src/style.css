@@ -449,6 +449,80 @@ textarea {
   border-block: 1px solid var(--line);
 }
 
+.apps-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.25rem;
+}
+
+.app-card {
+  background: var(--white);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 1.85rem 1.65rem 1.5rem;
+  box-shadow: var(--shadow-soft);
+  display: flex;
+  flex-direction: column;
+  transition: border-color 0.25s var(--ease), transform 0.25s var(--ease);
+}
+
+.app-card:hover {
+  border-color: #cfcec8;
+  transform: translateY(-2px);
+}
+
+.app-card .card-body {
+  flex: 1;
+  margin-bottom: 1rem;
+}
+
+.app-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-bottom: 1rem;
+}
+
+.app-tags li {
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  color: var(--ink-muted);
+  background: var(--bg-soft);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 0.28rem 0.65rem;
+  line-height: 1.3;
+}
+
+.app-soon {
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--ink-muted);
+  letter-spacing: -0.01em;
+  margin-top: auto;
+  border-top: 1px solid var(--line);
+  padding-top: 0.85rem;
+}
+
+@media (min-width: 901px) {
+  .apps-grid {
+    grid-template-columns: repeat(6, 1fr);
+  }
+
+  .app-card {
+    grid-column: span 2;
+  }
+
+  .app-card:nth-child(4) {
+    grid-column: 2 / span 2;
+  }
+
+  .app-card:nth-child(5) {
+    grid-column: 4 / span 2;
+  }
+}
+
 /* ---------- Portfolio ---------- */
 
 .gallery-grid {
@@ -662,7 +736,8 @@ textarea {
 }
 
 @media (max-width: 900px) {
-  .card-grid {
+  .card-grid,
+  .apps-grid {
     grid-template-columns: 1fr;
     max-width: 420px;
     margin-inline: auto;
