@@ -18,24 +18,39 @@ const setHeaderState = () => {
 setHeaderState()
 window.addEventListener('scroll', setHeaderState, { passive: true })
 
-const closeMenu = () => {
+const setMenuOpen = (open) => {
   if (!menuToggle || !mobileNav) return
-  menuToggle.setAttribute('aria-expanded', 'false')
-  mobileNav.hidden = true
+  menuToggle.setAttribute('aria-expanded', String(open))
+  mobileNav.hidden = !open
+  document.body.classList.toggle('is-menu-open', open)
 }
 
 menuToggle?.addEventListener('click', () => {
   const expanded = menuToggle.getAttribute('aria-expanded') === 'true'
-  menuToggle.setAttribute('aria-expanded', String(!expanded))
-  mobileNav.hidden = expanded
+  setMenuOpen(!expanded)
 })
 
 mobileNav?.querySelectorAll('a').forEach((link) => {
-  link.addEventListener('click', closeMenu)
+  link.addEventListener('click', () => setMenuOpen(false))
 })
 
 window.addEventListener('keydown', (event) => {
-  if (event.key === 'Escape') closeMenu()
+  if (event.key === 'Escape') setMenuOpen(false)
+})
+
+const validityMessage = (input) => {
+  if (input.validity.valueMissing) return '이 칸을 입력해 주세요.'
+  if (input.validity.typeMismatch) return '올바른 이메일 주소를 입력해 주세요.'
+  return ''
+}
+
+form?.querySelectorAll('input, textarea').forEach((input) => {
+  input.addEventListener('invalid', () => {
+    input.setCustomValidity(validityMessage(input))
+  })
+  input.addEventListener('input', () => {
+    input.setCustomValidity('')
+  })
 })
 
 form?.addEventListener('submit', (event) => {

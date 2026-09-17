@@ -35,6 +35,7 @@
 
 html {
   scroll-behavior: smooth;
+  scroll-padding-top: 5.5rem;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -54,6 +55,23 @@ body {
   margin: 0;
   background: var(--cream);
   color: var(--ink);
+}
+
+body.is-menu-open {
+  overflow: hidden;
+}
+
+h1,
+h2,
+h3,
+p,
+li,
+dd,
+dt,
+label,
+figcaption {
+  word-break: keep-all;
+  overflow-wrap: break-word;
 }
 
 img,
@@ -119,6 +137,14 @@ textarea {
   width: min(100% - 2rem, var(--wide));
   margin: 0 auto;
   padding: clamp(4rem, 10vw, 7rem) 0;
+}
+
+#about,
+#studio,
+#app,
+#portfolio,
+#contact {
+  scroll-margin-top: 5.5rem;
 }
 
 .section-head {
@@ -286,12 +312,16 @@ textarea {
   background: currentColor;
 }
 
+.menu-toggle-icon span {
+  transition: transform 0.2s ease;
+}
+
 .menu-toggle[aria-expanded='true'] .menu-toggle-icon span:first-child {
-  transform: translateY(3.75px) rotate(20deg);
+  transform: translateY(3.75px) rotate(45deg);
 }
 
 .menu-toggle[aria-expanded='true'] .menu-toggle-icon span:last-child {
-  transform: translateY(-3.75px) rotate(-20deg);
+  transform: translateY(-3.75px) rotate(-45deg);
 }
 
 .mobile-nav {
@@ -368,6 +398,7 @@ textarea {
 .hero-visual {
   position: relative;
   min-height: 22rem;
+  padding: 0.75rem 0.5rem 1.25rem;
 }
 
 .frame {
@@ -486,29 +517,55 @@ textarea {
   list-style: none;
   padding: 0;
   display: grid;
-  gap: 1rem;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.25rem 0.85rem;
 }
 
-.gallery-item p {
+.shot {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.shot-art {
+  position: relative;
+  display: grid;
+  place-items: center;
+  min-height: 11rem;
+  aspect-ratio: 4 / 5;
+}
+
+.gallery-item:nth-child(2) .shot-art,
+.gallery-item:nth-child(5) .shot-art {
+  aspect-ratio: 1;
+}
+
+.shot-art::after {
+  content: '';
+  width: 2.25rem;
+  height: 2.25rem;
+  border: 1px solid rgb(255 252 248 / 0.45);
+  opacity: 0.85;
+  background:
+    linear-gradient(var(--cream), var(--cream)) center / 12px 1px no-repeat,
+    linear-gradient(var(--cream), var(--cream)) center / 1px 12px no-repeat;
+}
+
+.shot-label {
+  position: absolute;
+  left: 0.7rem;
+  bottom: 0.7rem;
+  background: rgb(28 23 20 / 0.4);
+  color: var(--cream);
+  letter-spacing: 0.16em;
+  font-size: 0.72rem;
+  padding: 0.3rem 0.55rem;
+}
+
+.shot figcaption {
   margin-top: 0.55rem;
   font-size: 0.82rem;
   color: var(--muted);
-}
-
-.gallery-frame {
-  min-height: 14rem;
-  display: grid;
-  place-items: end start;
-  padding: 1rem;
-  color: var(--cream);
-  letter-spacing: 0.16em;
-  font-size: 0.75rem;
-  text-transform: uppercase;
-}
-
-.gallery-frame span {
-  background: rgb(28 23 20 / 0.35);
-  padding: 0.3rem 0.55rem;
 }
 
 .tone-1 {
@@ -588,6 +645,11 @@ textarea {
   color: var(--ink);
   padding: 0.8rem 0.9rem;
   border-radius: var(--radius);
+  line-height: 1.5;
+}
+
+.field input {
+  min-height: 48px;
 }
 
 .field textarea {
@@ -646,19 +708,6 @@ textarea {
 
   .gallery {
     grid-template-columns: repeat(3, 1fr);
-    grid-auto-rows: minmax(12rem, auto);
-  }
-
-  .gallery-item.tall {
-    grid-row: span 2;
-  }
-
-  .gallery-item.wide {
-    grid-column: span 2;
-  }
-
-  .gallery-item.tall .gallery-frame {
-    min-height: 100%;
   }
 
   .contact-grid {
