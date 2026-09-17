@@ -32,6 +32,6 @@ npm run preview
 연락처, 위치, SNS, 사업자 정보는 아직 비어 있습니다.
 페이지의 「연락처를 입력해 주세요」 같은 문구를 실제 정보로 바꿔 주세요.
 문의 폼은 전송 서버에 연결되어 있지 않습니다.
-앱 섹션의 기능 안내는 준비 중인 방향만 적었으며, 출시된 기능이 아닙니다.
+앱 섹션은 시안의 예약·앨범·일정 안내와 「곧 공개」 배지를 따릅니다.
 
 Contact, location, social, and business fields are labeled placeholders only.
