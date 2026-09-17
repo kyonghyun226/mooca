@@ -495,14 +495,47 @@ textarea {
   line-height: 1.3;
 }
 
-.app-soon {
-  font-size: 0.8125rem;
-  font-weight: 500;
-  color: var(--ink-muted);
-  letter-spacing: -0.01em;
+.app-downloads {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.45rem 0.5rem;
   margin-top: auto;
   border-top: 1px solid var(--line);
   padding-top: 0.85rem;
+}
+
+.app-downloads-label {
+  flex: 1 0 100%;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--ink-muted);
+}
+
+.store-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 36px;
+  padding: 0.35rem 0.8rem;
+  border-radius: 999px;
+  border: 1px solid var(--ink);
+  background: var(--white);
+  color: var(--ink);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  line-height: 1.2;
+  transition:
+    background 0.2s var(--ease),
+    color 0.2s var(--ease);
+}
+
+.store-btn:hover,
+.store-btn:focus-visible {
+  background: var(--ink);
+  color: var(--bg);
 }
 
 @media (min-width: 901px) {

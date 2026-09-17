@@ -32,6 +32,6 @@ npm run preview
 연락처, 위치, SNS, 사업자 정보는 아직 비어 있습니다.
 페이지의 「연락처를 입력해 주세요」 같은 문구를 실제 정보로 바꿔 주세요.
 문의 폼은 전송 서버에 연결되어 있지 않습니다.
-「MOOCA가 만드는 다른 서비스」는 스튜디오와 별개인 앱입니다. 스토어 링크는 아직 없으며 「곧 공개」로 표시합니다.
+「MOOCA가 만드는 다른 서비스」는 이미 출시된 앱입니다. App Store / Google Play 버튼은 `#` 플레이스홀더이니 실제 스토어 주소로 바꿔 주세요.
 
 Contact, location, social, and business fields are labeled placeholders only.
