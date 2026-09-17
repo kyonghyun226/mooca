@@ -98,7 +98,7 @@
           </p>
           <p class="section-body">
             스튜디오에서 쌓인 시선을 바탕으로 앱도 준비하고 있습니다.
-            아직 출시 전이며, 자세한 기능은 이 페이지에 적지 않습니다.
+            아직 출시 전이며, 준비 중인 방향은 아래 앱 섹션에서 볼 수 있습니다.
           </p>
         </div>
       </section>
@@ -177,33 +177,104 @@
 
       <section class="section app" id="app" aria-labelledby="app-heading">
         <div class="container">
-          <div class="app-grid">
-            <div class="device" aria-hidden="true">
-              <div class="device-notch"></div>
-              <div class="device-screen">
-                <span class="placeholder-mark">앱 화면 자리</span>
+          <div class="section-head">
+            <p class="eyebrow">App</p>
+            <h2 id="app-heading" class="section-title">예약부터 앨범까지, 한곳에서</h2>
+            <p class="section-lead">
+              MOOCA 앱으로 예약·앨범·일정을 한곳에서 관리하세요. 스튜디오 일정을 더 편하게 이어
+              드립니다.
+            </p>
+          </div>
+          <div class="app-layout">
+            <div class="app-device" aria-hidden="true">
+              <div class="phone-frame">
+                <div class="phone-notch"></div>
+                <div class="phone-screen">
+                  <div class="phone-status">
+                    <span class="phone-status-time"></span>
+                    <span class="phone-status-dots"><i></i><i></i><i></i></span>
+                  </div>
+                  <div class="phone-header-bar"></div>
+                  <div class="phone-card">
+                    <div class="phone-line phone-line--lg"></div>
+                    <div class="phone-line phone-line--sm"></div>
+                  </div>
+                  <div class="phone-card">
+                    <div class="phone-row">
+                      <span class="phone-thumb"></span>
+                      <span class="phone-lines">
+                        <span class="phone-line"></span>
+                        <span class="phone-line phone-line--sm"></span>
+                      </span>
+                    </div>
+                  </div>
+                  <div class="phone-card phone-card--soft">
+                    <div class="phone-line"></div>
+                    <div class="phone-line phone-line--sm"></div>
+                  </div>
+                  <div class="phone-bottom-bar">
+                    <span></span><span></span><span></span>
+                  </div>
+                </div>
+                <div class="phone-home"></div>
               </div>
             </div>
-            <div class="app-copy">
-              <p class="eyebrow">App</p>
-              <h2 id="app-heading" class="section-title">스튜디오의 온기를, 화면으로</h2>
-              <p class="section-lead app-lead">
-                지금은 앱을 만들고 있습니다. 아직 출시 전이며, 약속할 수 있는 기능 목록은 없습니다.
+            <div class="app-features">
+              <article class="card app-feature-card">
+                <div class="card-icon" aria-hidden="true">
+                  <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+                    <rect x="6" y="8" width="20" height="18" rx="2" stroke="currentColor" stroke-width="1.5" />
+                    <path d="M6 13h20M12 6v4M20 6v4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+                    <path d="M12 19h8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+                  </svg>
+                </div>
+                <h3 class="card-title">간편 예약</h3>
+                <p class="card-body">
+                  원하는 날짜와 패키지를 몇 번의 탭으로 예약하고, 변경도 앱에서 바로 요청할 수 있습니다.
+                </p>
+              </article>
+              <article class="card app-feature-card">
+                <div class="card-icon" aria-hidden="true">
+                  <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+                    <rect x="5" y="8" width="22" height="16" rx="2" stroke="currentColor" stroke-width="1.5" />
+                    <circle cx="12" cy="14" r="2.5" stroke="currentColor" stroke-width="1.5" />
+                    <path
+                      d="M5 20l6-5 4 3 3-2 9 4"
+                      stroke="currentColor"
+                      stroke-width="1.5"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                  </svg>
+                </div>
+                <h3 class="card-title">촬영 앨범</h3>
+                <p class="card-body">
+                  완성된 사진을 앨범으로 모아 보고, 마음에 드는 컷을 골라 가족과 함께 나눌 수 있습니다.
+                </p>
+              </article>
+              <article class="card app-feature-card">
+                <div class="card-icon" aria-hidden="true">
+                  <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+                    <circle cx="16" cy="16" r="10" stroke="currentColor" stroke-width="1.5" />
+                    <path
+                      d="M16 10v6l4 2"
+                      stroke="currentColor"
+                      stroke-width="1.5"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                    <path d="M22 7l2-2M26 11h3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+                  </svg>
+                </div>
+                <h3 class="card-title">일정·알림</h3>
+                <p class="card-body">
+                  촬영 일정과 준비 안내를 미리 받아, 당일에도 여유롭게 스튜디오를 방문할 수 있습니다.
+                </p>
+              </article>
+              <p class="app-cta">
+                <span class="app-cta-badge">곧 공개</span>
+                <a class="text-link" href="#contact">앱 소개 더 보기</a>
               </p>
-              <ul class="feature-list">
-                <li>
-                  <h3>연결</h3>
-                  <p>예약과 상담을 한곳에서 잇는 방향을 고민 중입니다.</p>
-                </li>
-                <li>
-                  <h3>기록</h3>
-                  <p>반려와의 장면을 편하게 돌아보는 경험을 살피고 있습니다.</p>
-                </li>
-                <li>
-                  <h3>안내</h3>
-                  <p>출시 일정은 미정입니다. 가까워지면 이 페이지에서 전합니다.</p>
-                </li>
-              </ul>
             </div>
           </div>
         </div>
