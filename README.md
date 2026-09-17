@@ -3,7 +3,7 @@
 반려동물 컴패니언 스튜디오 **MOOCA** 소개 사이트입니다.
 태그라인: *My One and Only Companion Animal*
 
-A single-page intro for MOOCA — a Korean companion-animal photo studio currently building an app.
+A single-page intro for MOOCA — a Korean companion-animal photo studio.
 
 ## 로컬 실행 / Run locally
 
@@ -32,6 +32,5 @@ npm run preview
 연락처, 위치, SNS, 사업자 정보는 아직 비어 있습니다.
 페이지의 「연락처를 입력해 주세요」 같은 문구를 실제 정보로 바꿔 주세요.
 문의 폼은 전송 서버에 연결되어 있지 않습니다.
-앱 섹션은 시안의 예약·앨범·일정 안내와 「곧 공개」 배지를 따릅니다.
 
 Contact, location, social, and business fields are labeled placeholders only.
