@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/png" href="/logo.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#FAFAF8" />
+    <title>앱 카드 관리 — MOOCA Admin</title>
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css"
+    />
+  </head>
+  <body class="admin-body">
+    <header class="admin-header">
+      <div class="container admin-header-inner">
+        <div class="admin-brand">
+          <a href="/" class="logo-link" aria-label="MOOCA 랜딩으로">
+            <img class="logo logo--admin" src="/logo.png" alt="MOOCA" width="96" height="32" />
+          </a>
+          <span class="admin-brand-label">Admin</span>
+        </div>
+        <span class="admin-chip" data-admin-chip>
+          <span class="admin-chip-dot" aria-hidden="true"></span>
+          <span data-admin-chip-label>로컬</span>
+        </span>
+      </div>
+    </header>
+
+    <main class="admin-main">
+      <div class="container">
+        <header class="admin-page-head">
+          <h1 class="admin-page-title">앱 카드 관리</h1>
+          <p class="admin-page-help">
+            여기서 수정한 내용은 공개 랜딩의 <strong>Apps</strong> 섹션에 반영됩니다.
+            이름·한 줄 소개·아이콘·스토어 URL만 편집할 수 있습니다.
+          </p>
+        </header>
+
+        <section class="admin-auth" data-admin-auth hidden>
+          <h2 class="admin-page-title">관리자 로그인</h2>
+          <p class="admin-page-help">Firebase가 연결되면 이메일로 로그인해야 저장할 수 있습니다.</p>
+          <form class="admin-auth-form" data-admin-login>
+            <label class="admin-label" for="admin-email">이메일</label>
+            <input class="admin-input" id="admin-email" name="email" type="email" autocomplete="username" required />
+            <label class="admin-label" for="admin-password">비밀번호</label>
+            <input
+              class="admin-input"
+              id="admin-password"
+              name="password"
+              type="password"
+              autocomplete="current-password"
+              required
+            />
+            <button class="btn btn--primary" type="submit">로그인</button>
+            <p class="admin-save-status" data-admin-login-status></p>
+          </form>
+        </section>
+
+        <div class="admin-apps-list" role="list" data-admin-list></div>
+
+        <p class="admin-footer-note">
+          Firebase 프로젝트가 아직 연결되지 않으면 이 브라우저의 localStorage에 저장됩니다.
+          연결 후 Firestore 컬렉션 <code>apps</code>와 Storage 경로
+          <code>apps/{appId}/icon.*</code>를 사용합니다. 프로젝트 ID는 환경 변수로만 넣으세요.
+          v1 범위 외: 키워드 칩 편집, 앱 추가/삭제, 포트폴리오, Contact, Hero.
+        </p>
+      </div>
+    </main>
+
+    <script type="module" src="/src/admin-apps.js"></script>
+  </body>
+</html>

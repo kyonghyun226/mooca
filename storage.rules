@@ -1,0 +1,44 @@
+rules_version = '2';
+
+// TODO: Bind a real Firebase project before deploying these rules.
+// Do not invent a project ID. Admin identity matches firestore.rules.
+
+service firebase.storage {
+  match /b/{bucket}/o {
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function adminEmails() {
+      // TODO: replace with verified admin emails after project bind.
+      return [];
+    }
+
+    function isAdmin() {
+      return isSignedIn()
+        && request.auth.token.email is string
+        && request.auth.token.email_verified == true
+        && (
+          request.auth.token.admin == true
+          || request.auth.token.email in adminEmails()
+        );
+    }
+
+    function isKnownAppId(appId) {
+      return appId in ['seesaw', 'pooptime', 'randomdrop', 'banjjak', 'ieum'];
+    }
+
+    match /apps/{appId}/{fileName} {
+      allow read: if true;
+      allow write: if isAdmin()
+        && isKnownAppId(appId)
+        && fileName.matches('^icon\\.(png|svg|webp)$')
+        && request.resource.size < 2 * 1024 * 1024
+        && request.resource.contentType in [
+          'image/png',
+          'image/svg+xml',
+          'image/webp'
+        ];
+    }
+  }
+}
