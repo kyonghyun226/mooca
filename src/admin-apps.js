@@ -168,6 +168,8 @@ const createCard = (app) => {
   saveBtn.addEventListener('click', async () => {
     try {
       saveBtn.disabled = true
+      saveBtn.textContent = '저장 중…'
+      status.textContent = '저장 중…'
       await updateApp(app.id, {
         name: nameInput.value,
         description: descInput.value,
@@ -183,6 +185,7 @@ const createCard = (app) => {
     } catch (error) {
       status.textContent = error.message || '저장하지 못했습니다.'
       status.style.color = 'var(--ink-soft)'
+      saveBtn.textContent = '저장'
     } finally {
       saveBtn.disabled = false
     }
