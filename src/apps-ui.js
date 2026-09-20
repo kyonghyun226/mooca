@@ -45,6 +45,20 @@ export function createPublicAppRow(app, index) {
   if ((app.tags ?? []).length) info.append(tags)
 
   row.append(no, info)
+  row.style.cursor = 'pointer'
+  row.addEventListener('click', (event) => {
+    if (event.target.closest('a')) return
+    window.location.href = `/apps/${app.id}`
+  })
+  row.addEventListener('keydown', (event) => {
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault()
+      window.location.href = `/apps/${app.id}`
+    }
+  })
+  row.tabIndex = 0
+  row.setAttribute('role', 'link')
+  row.setAttribute('aria-label', `${app.name} 상세 보기`)
 
   const ios = app.appStoreUrl?.trim()
   const play = app.googlePlayUrl?.trim()

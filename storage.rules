@@ -44,12 +44,13 @@ service firebase.storage {
       allow read: if true;
       allow write: if isAdmin()
         && isKnownAppId(appId)
-        && fileName.matches('^icon\\.(png|svg|webp)$')
+        && fileName.matches('^(icon\\.(png|svg|webp)|mockup-[0-9]+\\.(jpg|jpeg|png|webp))$')
         && request.resource.size < 2 * 1024 * 1024
         && request.resource.contentType in [
           'image/png',
           'image/svg+xml',
-          'image/webp'
+          'image/webp',
+          'image/jpeg'
         ];
     }
   }

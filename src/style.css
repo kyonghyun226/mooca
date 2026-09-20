@@ -1794,3 +1794,86 @@ h1, h2, h3, h4, p, figure {
   object-fit: cover;
   display: block;
 }
+
+
+/* App detail */
+.app-detail {
+  padding-bottom: 5rem;
+}
+.app-detail-hero {
+  padding: clamp(4rem, 10vw, 7rem) 0 3rem;
+  background: #fff;
+}
+.app-detail-title-row {
+  display: flex;
+  gap: 1.25rem;
+  align-items: flex-start;
+  margin: 1.25rem 0 1.5rem;
+}
+.app-detail-icon {
+  width: 64px;
+  height: 64px;
+  flex: 0 0 auto;
+  border: 1px solid var(--line, #e2e1db);
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+}
+.app-detail-icon img,
+.app-detail-icon svg {
+  width: 40px;
+  height: 40px;
+}
+.app-detail-tagline {
+  margin: 0.35rem 0 0;
+  color: var(--ink-soft, #4a4a48);
+  font-size: 1.05rem;
+}
+.app-detail-body {
+  max-width: 40rem;
+  line-height: 1.7;
+  color: var(--ink-soft, #4a4a48);
+}
+.app-detail-actions {
+  margin-top: 1.75rem;
+}
+.app-detail-mockups,
+.app-detail-features {
+  padding-top: 2.5rem;
+}
+.app-detail-mock-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+  margin-top: 1.25rem;
+}
+.app-detail-mock {
+  margin: 0;
+}
+.app-detail-mock img,
+.app-detail-mock .frame {
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  object-fit: cover;
+  background: var(--bg-deep, #f3f3f3);
+  border: 1px solid var(--line, #e2e1db);
+}
+.app-detail-mock .frame {
+  display: grid;
+  place-items: center;
+}
+.app-detail-feature-list {
+  margin: 1rem 0 0;
+  padding-left: 1.2rem;
+  line-height: 1.7;
+  color: var(--ink-soft, #4a4a48);
+}
+.pub-app-row:focus-visible {
+  outline: 2px solid var(--ink, #1a1a1a);
+  outline-offset: 4px;
+}
+@media (max-width: 700px) {
+  .app-detail-mock-grid {
+    grid-template-columns: 1fr;
+  }
+}

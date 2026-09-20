@@ -6,6 +6,7 @@ import {
   listApps,
   updateApp,
   uploadIcon,
+  uploadAppMockup,
 } from './data/apps-repository.js'
 import { getFirebaseAuth } from './lib/firebase.js'
 
@@ -122,9 +123,64 @@ const createCard = (app) => {
   urlRow.className = 'admin-field-row'
   urlRow.append(createField('App Store URL', iosInput), createField('Google Play URL', playInput))
 
+  const taglineInput = document.createElement('input')
+  taglineInput.className = 'admin-input'
+  taglineInput.id = `tagline-${app.id}`
+  taglineInput.type = 'text'
+  taglineInput.value = app.tagline || ''
+  taglineInput.maxLength = 80
+
+  const bodyInput = document.createElement('textarea')
+  bodyInput.className = 'admin-input'
+  bodyInput.id = `body-${app.id}`
+  bodyInput.rows = 4
+  bodyInput.value = app.body || ''
+
+  const featuresInput = document.createElement('textarea')
+  featuresInput.className = 'admin-input'
+  featuresInput.id = `features-${app.id}`
+  featuresInput.rows = 3
+  featuresInput.placeholder = '한 줄에 기능 하나씩'
+  featuresInput.value = (app.features || []).join('\n')
+
+  const mockupNote = document.createElement('p')
+  mockupNote.className = 'admin-icon-note'
+  mockupNote.textContent = `목업 ${(app.mockupUrls || []).length}장`
+
+  const mockupBtn = document.createElement('button')
+  mockupBtn.type = 'button'
+  mockupBtn.className = 'btn btn--ghost'
+  mockupBtn.textContent = '목업 이미지 추가'
+
+  const mockupInput = document.createElement('input')
+  mockupInput.type = 'file'
+  mockupInput.accept = 'image/jpeg,image/png,image/webp'
+  mockupInput.hidden = true
+
+  const mockupField = document.createElement('div')
+  mockupField.className = 'admin-field'
+  mockupField.append(
+    Object.assign(document.createElement('span'), {
+      className: 'admin-label',
+      textContent: '상세 목업',
+    }),
+    mockupNote,
+    mockupBtn,
+    mockupInput,
+  )
+
   const fields = document.createElement('div')
   fields.className = 'admin-fields'
-  fields.append(createField('앱 이름', nameInput), descField, iconField, urlRow)
+  fields.append(
+    createField('앱 이름', nameInput),
+    descField,
+    iconField,
+    urlRow,
+    createField('상세 태그라인', taglineInput),
+    createField('상세 소개', bodyInput),
+    createField('주요 기능', featuresInput),
+    mockupField,
+  )
 
   const footer = document.createElement('div')
   footer.className = 'admin-card-footer'
@@ -144,8 +200,24 @@ const createCard = (app) => {
     status.style.color = 'var(--ink-soft)'
   }
 
-  ;[nameInput, descInput, iosInput, playInput].forEach((input) => {
+  ;[nameInput, descInput, iosInput, playInput, taglineInput, bodyInput, featuresInput].forEach((input) => {
     input.addEventListener('input', markDirty)
+  })
+
+  mockupBtn.addEventListener('click', () => mockupInput.click())
+  mockupInput.addEventListener('change', async () => {
+    const file = mockupInput.files?.[0]
+    mockupInput.value = ''
+    if (!file) return
+    try {
+      status.textContent = '목업 올리는 중…'
+      const saved = await uploadAppMockup(app.id, file)
+      mockupNote.textContent = `목업 ${(saved.mockupUrls || []).length}장`
+      status.textContent = '목업 저장됨'
+      app.mockupUrls = saved.mockupUrls
+    } catch (error) {
+      status.textContent = error.message || '목업을 올리지 못했습니다.'
+    }
   })
 
   uploadBtn.addEventListener('click', () => fileInput.click())
@@ -175,6 +247,12 @@ const createCard = (app) => {
         description: descInput.value,
         appStoreUrl: iosInput.value,
         googlePlayUrl: playInput.value,
+        tagline: taglineInput.value,
+        body: bodyInput.value,
+        features: featuresInput.value
+          .split('\n')
+          .map((line) => line.trim())
+          .filter(Boolean),
       })
       status.textContent = '저장됨'
       status.style.color = 'var(--ink-muted)'
