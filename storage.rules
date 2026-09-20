@@ -44,7 +44,7 @@ service firebase.storage {
       allow read: if true;
       allow write: if isAdmin()
         && isKnownAppId(appId)
-        && fileName.matches('^(icon\.(png|svg|webp)|mockup-[0-9]+\.(jpg|jpeg|png|webp))$')
+        && fileName.matches('^(icon\\.(png|svg|webp)|mockup-[0-9]+\\.(jpg|jpeg|png|webp))$')
         && request.resource.size < 2 * 1024 * 1024
         && request.resource.contentType in [
           'image/png',
@@ -58,7 +58,7 @@ service firebase.storage {
       allow read: if true;
       allow write: if isAdmin()
         && isKnownAppId(appId)
-        && fileName.matches('^[0-2]\.(jpg|jpeg|png|webp)$')
+        && fileName.matches('^[0-2]\\.(jpg|jpeg|png|webp)$')
         && request.resource.size < 4 * 1024 * 1024
         && request.resource.contentType in [
           'image/png',
