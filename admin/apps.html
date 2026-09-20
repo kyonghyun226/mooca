@@ -5,7 +5,7 @@
     <link rel="icon" type="image/png" href="/logo.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#FAFAF8" />
-    <title>앱 카드 관리 — MOOCA Admin</title>
+    <title>앱 카드 · 상세 관리 — MOOCA Admin</title>
     <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
     <link
       rel="stylesheet"
@@ -35,10 +35,10 @@
     <main class="admin-main">
       <div class="container">
         <header class="admin-page-head">
-          <h1 class="admin-page-title">앱 카드 관리</h1>
+          <h1 class="admin-page-title">앱 카드 · 상세 관리</h1>
           <p class="admin-page-help">
-            여기서 수정한 내용은 공개 랜딩의 <strong>Apps</strong> 섹션에 반영됩니다.
-            이름·한 줄 소개·아이콘·스토어 URL만 편집할 수 있습니다.
+            리스트 카드(이름·한 줄·아이콘·스토어 URL)와 상세 페이지(태그라인·소개·기능·목업·갤러리 캡션)를 함께 수정합니다.
+            「상세 페이지」 아코디언을 열어 상세 필드를 편집하세요.
           </p>
         </header>
 
@@ -68,7 +68,7 @@
           Firebase 프로젝트가 아직 연결되지 않으면 이 브라우저의 localStorage에 저장됩니다.
           연결 후 Firestore 컬렉션 <code>apps</code>와 Storage 경로
           <code>apps/{appId}/icon.*</code>를 사용합니다. 프로젝트 ID는 환경 변수로만 넣으세요.
-          v1 범위 외: 키워드 칩 편집, 앱 추가/삭제, 포트폴리오, Contact, Hero.
+          v2: 상세 아코디언 포함. 범위 외: 키워드 칩 편집, 앱 추가/삭제, 포트폴리오, Contact, Hero.
         </p>
       </div>
     </main>

@@ -67,7 +67,8 @@ service cloud.firestore {
           'tagline',
           'body',
           'features',
-          'mockupUrls'
+          'mockupUrls',
+          'galleryCaptions'
         ])
         && data.id == appId
         && data.name is string
@@ -79,10 +80,11 @@ service cloud.firestore {
         && isValidHttpUrlOrEmpty(data.iconUrl)
         && isValidHttpUrlOrEmpty(data.appStoreUrl)
         && isValidHttpUrlOrEmpty(data.googlePlayUrl)
-        && (!('tagline' in data) || (data.tagline is string && data.tagline.size() <= 80))
-        && (!('body' in data) || (data.body is string && data.body.size() <= 2000))
+        && (!('tagline' in data) || (data.tagline is string && data.tagline.size() <= 60))
+        && (!('body' in data) || (data.body is string && data.body.size() <= 600))
         && (!('features' in data) || data.features is list)
         && (!('mockupUrls' in data) || data.mockupUrls is list)
+        && (!('galleryCaptions' in data) || data.galleryCaptions is list)
         && isWholeOrder(data.order)
         && data.updatedAt is timestamp
         && (!('updatedBy' in data) || (data.updatedBy is string && data.updatedBy.size() <= 320))

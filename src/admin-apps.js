@@ -22,7 +22,7 @@ const setStatus = (el, text) => {
   if (el) el.textContent = text
 }
 
-const createField = (labelText, input) => {
+const createField = (labelText, input, hintText) => {
   const wrap = document.createElement('div')
   wrap.className = 'admin-field'
   const label = document.createElement('label')
@@ -30,6 +30,12 @@ const createField = (labelText, input) => {
   label.htmlFor = input.id
   label.textContent = labelText
   wrap.append(label, input)
+  if (hintText) {
+    const hint = document.createElement('p')
+    hint.className = 'admin-hint'
+    hint.textContent = hintText
+    wrap.append(hint)
+  }
   return wrap
 }
 
@@ -62,12 +68,6 @@ const createCard = (app) => {
   descInput.type = 'text'
   descInput.maxLength = 80
   descInput.value = app.description
-
-  const descField = createField('한 줄 소개', descInput)
-  const hint = document.createElement('p')
-  hint.className = 'admin-hint'
-  hint.textContent = '공개 카드에 표시되는 원라이너 (권장 40자 이내)'
-  descField.append(hint)
 
   const preview = document.createElement('div')
   preview.className = 'admin-icon-preview'
@@ -121,75 +121,175 @@ const createCard = (app) => {
 
   const urlRow = document.createElement('div')
   urlRow.className = 'admin-field-row'
-  urlRow.append(createField('App Store URL', iosInput), createField('Google Play URL', playInput))
+  urlRow.append(
+    createField('App Store URL', iosInput),
+    createField('Google Play URL', playInput),
+  )
 
   const taglineInput = document.createElement('input')
   taglineInput.className = 'admin-input'
   taglineInput.id = `tagline-${app.id}`
   taglineInput.type = 'text'
+  taglineInput.maxLength = 60
   taglineInput.value = app.tagline || ''
-  taglineInput.maxLength = 80
 
   const bodyInput = document.createElement('textarea')
-  bodyInput.className = 'admin-input'
+  bodyInput.className = 'admin-input admin-textarea--lg'
   bodyInput.id = `body-${app.id}`
-  bodyInput.rows = 4
+  bodyInput.rows = 5
+  bodyInput.maxLength = 600
   bodyInput.value = app.body || ''
 
-  const featuresInput = document.createElement('textarea')
-  featuresInput.className = 'admin-input'
-  featuresInput.id = `features-${app.id}`
-  featuresInput.rows = 3
-  featuresInput.placeholder = '한 줄에 기능 하나씩'
-  featuresInput.value = (app.features || []).join('\n')
+  const featureInputs = [0, 1, 2].map((i) => {
+    const input = document.createElement('input')
+    input.className = 'admin-input'
+    input.id = `feature-${app.id}-${i}`
+    input.type = 'text'
+    input.maxLength = 60
+    input.value = app.features?.[i] || ''
+    return input
+  })
 
-  const mockupNote = document.createElement('p')
-  mockupNote.className = 'admin-icon-note'
-  mockupNote.textContent = `목업 ${(app.mockupUrls || []).length}장`
+  const featuresFieldset = document.createElement('fieldset')
+  featuresFieldset.className = 'admin-fieldset'
+  const featuresLegend = document.createElement('legend')
+  featuresLegend.className = 'admin-label'
+  featuresLegend.textContent = '주요 기능 (3)'
+  featuresFieldset.append(featuresLegend)
+  featureInputs.forEach((input, i) => {
+    featuresFieldset.append(
+      createField(`기능 ${String(i + 1).padStart(2, '0')}`, input),
+    )
+  })
 
-  const mockupBtn = document.createElement('button')
-  mockupBtn.type = 'button'
-  mockupBtn.className = 'btn btn--ghost'
-  mockupBtn.textContent = '목업 이미지 추가'
-
-  const mockupInput = document.createElement('input')
-  mockupInput.type = 'file'
-  mockupInput.accept = 'image/jpeg,image/png,image/webp'
-  mockupInput.hidden = true
+  const mockSlots = [0, 1, 2].map((i) => {
+    const slot = document.createElement('div')
+    slot.className = 'admin-mockup-slot'
+    const previewEl = document.createElement('div')
+    previewEl.className = 'admin-mockup-preview'
+    const url = app.mockupUrls?.[i]
+    if (url) {
+      const img = document.createElement('img')
+      img.src = url
+      img.alt = ''
+      img.style.cssText = 'width:100%;height:100%;object-fit:cover;display:block;'
+      previewEl.replaceChildren(img)
+    } else {
+      previewEl.textContent = String(i + 1)
+    }
+    const btn = document.createElement('button')
+    btn.type = 'button'
+    btn.className = 'btn btn--ghost'
+    btn.textContent = '업로드'
+    const input = document.createElement('input')
+    input.type = 'file'
+    input.accept = 'image/jpeg,image/png,image/webp'
+    input.hidden = true
+    btn.addEventListener('click', () => input.click())
+    input.addEventListener('change', async () => {
+      const file = input.files?.[0]
+      input.value = ''
+      if (!file) return
+      try {
+        status.textContent = `목업 ${i + 1} 올리는 중…`
+        const saved = await uploadAppMockup(app.id, file, i)
+        app.mockupUrls = saved.mockupUrls
+        const nextUrl = saved.mockupUrls?.[i]
+        if (nextUrl) {
+          const img = document.createElement('img')
+          img.src = nextUrl
+          img.alt = ''
+          img.style.cssText =
+            'width:100%;height:100%;object-fit:cover;display:block;'
+          previewEl.replaceChildren(img)
+        }
+        status.textContent = '목업 저장됨'
+        markDirty()
+      } catch (error) {
+        status.textContent = error.message || '목업을 올리지 못했습니다.'
+      }
+    })
+    slot.append(previewEl, btn, input)
+    return slot
+  })
 
   const mockupField = document.createElement('div')
   mockupField.className = 'admin-field'
-  mockupField.append(
-    Object.assign(document.createElement('span'), {
-      className: 'admin-label',
-      textContent: '상세 목업',
-    }),
-    mockupNote,
-    mockupBtn,
-    mockupInput,
+  const mockLabel = document.createElement('span')
+  mockLabel.className = 'admin-label'
+  mockLabel.textContent = '목업 이미지 (1–3)'
+  const mockHint = document.createElement('p')
+  mockHint.className = 'admin-hint'
+  mockHint.textContent = 'PNG / WebP · 권장 9:16 · storage: apps/' + app.id + '/mockups/'
+  const mockGrid = document.createElement('div')
+  mockGrid.className = 'admin-mockup-grid'
+  mockGrid.append(...mockSlots)
+  mockupField.append(mockLabel, mockHint, mockGrid)
+
+  const captionInputs = [0, 1, 2].map((i) => {
+    const input = document.createElement('input')
+    input.className = 'admin-input'
+    input.id = `cap-${app.id}-${i}`
+    input.type = 'text'
+    input.maxLength = 40
+    input.placeholder = `캡션 ${i + 1}`
+    input.value = app.galleryCaptions?.[i] || ''
+    return input
+  })
+  const captionRow = document.createElement('div')
+  captionRow.className = 'admin-field-row admin-field-row--3'
+  captionInputs.forEach((input, i) => {
+    captionRow.append(createField(`갤러리 캡션 ${i + 1}`, input))
+  })
+
+  const previewLink = document.createElement('p')
+  previewLink.className = 'admin-detail-preview-link'
+  const previewA = document.createElement('a')
+  previewA.href = `/apps/${app.id}`
+  previewA.target = '_blank'
+  previewA.rel = 'noopener noreferrer'
+  previewA.textContent = `공개 미리보기: /apps/${app.id}`
+  previewLink.append(document.createTextNode('공개 미리보기: '), previewA)
+
+  const details = document.createElement('details')
+  details.className = 'admin-detail-acc'
+  const summary = document.createElement('summary')
+  summary.className = 'admin-detail-summary'
+  summary.append(document.createTextNode('상세 페이지'))
+  const summaryHint = document.createElement('span')
+  summaryHint.className = 'admin-detail-hint'
+  summaryHint.textContent = '태그라인 · 소개 · 기능 · 목업'
+  summary.append(summaryHint)
+  const panel = document.createElement('div')
+  panel.className = 'admin-detail-panel'
+  panel.append(
+    createField('상세 태그라인', taglineInput, '권장 24자 이내 · 상세 히어로'),
+    createField('소개 (본문)', bodyInput, '최대 600자'),
+    featuresFieldset,
+    mockupField,
+    captionRow,
+    previewLink,
   )
+  details.append(summary, panel)
 
   const fields = document.createElement('div')
   fields.className = 'admin-fields'
   fields.append(
     createField('앱 이름', nameInput),
-    descField,
+    createField('한 줄 소개', descInput, '공개 카드 원라이너 (권장 40자 이내)'),
     iconField,
     urlRow,
-    createField('상세 태그라인', taglineInput),
-    createField('상세 소개', bodyInput),
-    createField('주요 기능', featuresInput),
-    mockupField,
+    details,
   )
 
   const footer = document.createElement('div')
-  footer.className = 'admin-card-footer'
-  const status = document.createElement('span')
+  footer.className = 'admin-app-card-foot'
+  const status = document.createElement('p')
   status.className = 'admin-save-status'
   status.textContent = '변경 사항 없음'
   const saveBtn = document.createElement('button')
   saveBtn.type = 'button'
-  saveBtn.className = 'btn btn--primary btn--sm btn--save'
+  saveBtn.className = 'btn btn--ink btn--save'
   saveBtn.textContent = '저장'
   footer.append(status, saveBtn)
 
@@ -198,27 +298,19 @@ const createCard = (app) => {
   const markDirty = () => {
     status.textContent = '저장되지 않은 변경'
     status.style.color = 'var(--ink-soft)'
+    saveBtn.textContent = '저장'
   }
 
-  ;[nameInput, descInput, iosInput, playInput, taglineInput, bodyInput, featuresInput].forEach((input) => {
-    input.addEventListener('input', markDirty)
-  })
-
-  mockupBtn.addEventListener('click', () => mockupInput.click())
-  mockupInput.addEventListener('change', async () => {
-    const file = mockupInput.files?.[0]
-    mockupInput.value = ''
-    if (!file) return
-    try {
-      status.textContent = '목업 올리는 중…'
-      const saved = await uploadAppMockup(app.id, file)
-      mockupNote.textContent = `목업 ${(saved.mockupUrls || []).length}장`
-      status.textContent = '목업 저장됨'
-      app.mockupUrls = saved.mockupUrls
-    } catch (error) {
-      status.textContent = error.message || '목업을 올리지 못했습니다.'
-    }
-  })
+  ;[
+    nameInput,
+    descInput,
+    iosInput,
+    playInput,
+    taglineInput,
+    bodyInput,
+    ...featureInputs,
+    ...captionInputs,
+  ].forEach((input) => input.addEventListener('input', markDirty))
 
   uploadBtn.addEventListener('click', () => fileInput.click())
   fileInput.addEventListener('change', async () => {
@@ -229,11 +321,10 @@ const createCard = (app) => {
       status.textContent = '아이콘 올리는 중…'
       const saved = await uploadIcon(app.id, file)
       fillIcon(preview, saved)
+      app.iconUrl = saved.iconUrl
       status.textContent = '아이콘 저장됨'
-      status.style.color = 'var(--ink-muted)'
     } catch (error) {
       status.textContent = error.message || '아이콘을 올리지 못했습니다.'
-      status.style.color = 'var(--ink-soft)'
     }
   })
 
@@ -249,10 +340,8 @@ const createCard = (app) => {
         googlePlayUrl: playInput.value,
         tagline: taglineInput.value,
         body: bodyInput.value,
-        features: featuresInput.value
-          .split('\n')
-          .map((line) => line.trim())
-          .filter(Boolean),
+        features: featureInputs.map((input) => input.value.trim()).filter(Boolean),
+        galleryCaptions: captionInputs.map((input) => input.value.trim()),
       })
       status.textContent = '저장됨'
       status.style.color = 'var(--ink-muted)'

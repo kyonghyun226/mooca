@@ -26,3 +26,4 @@ dist-ssr
 *.sln
 *.sw?
 _design-mock/
+.design-ref/

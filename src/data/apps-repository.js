@@ -35,6 +35,11 @@ const mergeSeed = (record) => {
       : Array.isArray(seed.mockupUrls)
         ? seed.mockupUrls
         : [],
+    galleryCaptions: Array.isArray(record.galleryCaptions)
+      ? record.galleryCaptions
+      : Array.isArray(seed.galleryCaptions)
+        ? seed.galleryCaptions
+        : [],
   }
   return merged
 }
@@ -122,17 +127,30 @@ export async function updateApp(id, patch) {
     ).trim(),
     body: String(patch.body === undefined ? current.body ?? '' : patch.body).trim(),
     features: Array.isArray(patch.features)
-      ? patch.features.map((item) => String(item).trim()).filter(Boolean)
-      : current.features ?? [],
+      ? patch.features.map((item) => String(item).trim()).filter(Boolean).slice(0, 3)
+      : (current.features ?? []).slice(0, 3),
     mockupUrls: Array.isArray(patch.mockupUrls)
-      ? patch.mockupUrls.map((item) => String(item).trim()).filter(Boolean)
-      : current.mockupUrls ?? [],
+      ? patch.mockupUrls.map((item) => String(item || '').trim()).slice(0, 3).filter((u, i, arr) => {
+          let end = arr.length
+          while (end > 0 && !arr[end - 1]) end -= 1
+          return i < end
+        })
+      : (current.mockupUrls ?? []).slice(0, 3),
+    galleryCaptions: Array.isArray(patch.galleryCaptions)
+      ? patch.galleryCaptions.map((item) => String(item).trim()).slice(0, 3)
+      : (current.galleryCaptions ?? []).slice(0, 3),
   }
 
   if (!next.name) throw new Error('앱 이름을 입력해 주세요.')
   if (!next.description) throw new Error('한 줄 소개를 입력해 주세요.')
   if (next.description.length > 80) {
     throw new Error('한 줄 소개는 80자 이내여야 합니다.')
+  }
+  if (next.tagline.length > 60) {
+    throw new Error('상세 태그라인은 60자 이내여야 합니다.')
+  }
+  if (next.body.length > 600) {
+    throw new Error('소개 본문은 600자 이내여야 합니다.')
   }
 
   if (isFirebaseConfigured()) {
@@ -155,6 +173,7 @@ export async function updateApp(id, patch) {
         body: next.body,
         features: next.features,
         mockupUrls: next.mockupUrls,
+        galleryCaptions: next.galleryCaptions,
         order: Math.round(Number(current.order)),
         updatedAt: serverTimestamp(),
         ...(writer?.email || writer?.uid
@@ -179,6 +198,7 @@ export async function updateApp(id, patch) {
     body: next.body,
     features: next.features,
     mockupUrls: next.mockupUrls,
+    galleryCaptions: next.galleryCaptions,
     updatedAt: new Date().toISOString(),
   }
   writeOverlay(overlay)
@@ -228,8 +248,7 @@ const fileToDataUrl = (file) =>
     reader.readAsDataURL(file)
   })
 
-
-export async function uploadAppMockup(id, file) {
+export async function uploadAppMockup(id, file, slot = 0) {
   if (!APP_IDS.includes(id)) throw new Error('알 수 없는 앱입니다.')
   const allowed = ['image/jpeg', 'image/png', 'image/webp']
   if (!allowed.includes(file.type)) {
@@ -238,6 +257,7 @@ export async function uploadAppMockup(id, file) {
   if (file.size > 4 * 1024 * 1024) {
     throw new Error('이미지는 4MB 이하여야 합니다.')
   }
+  const index = Math.max(0, Math.min(2, Number(slot) || 0))
   const current = (await listApps()).find((app) => app.id === id)
   if (!current) throw new Error('알 수 없는 앱입니다.')
 
@@ -249,7 +269,7 @@ export async function uploadAppMockup(id, file) {
     const storage = await getFirebaseStorage()
     if (!storage) throw new Error('Firebase가 아직 연결되지 않았습니다.')
     const { getDownloadURL, ref, uploadBytes } = await import('firebase/storage')
-    const path = `apps/${id}/mockup-${Date.now()}.${ext}`
+    const path = `apps/${id}/mockups/${index}.${ext}`
     const fileRef = ref(storage, path)
     await uploadBytes(fileRef, file, { contentType: file.type })
     url = await getDownloadURL(fileRef)
@@ -262,6 +282,9 @@ export async function uploadAppMockup(id, file) {
     })
   }
 
-  const mockupUrls = [...(current.mockupUrls ?? []), url]
-  return updateApp(id, { mockupUrls })
+  const slots = [current.mockupUrls?.[0] || '', current.mockupUrls?.[1] || '', current.mockupUrls?.[2] || '']
+  slots[index] = url
+  let end = slots.length
+  while (end > 0 && !slots[end - 1]) end -= 1
+  return updateApp(id, { mockupUrls: slots.slice(0, Math.max(end, index + 1)) })
 }
