@@ -7,11 +7,31 @@
   },
   "hosting": {
     "public": "dist",
-    "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
     "rewrites": [
       {
         "source": "/admin/apps",
         "destination": "/admin/apps.html"
+      },
+      {
+        "source": "/admin/apps/**",
+        "destination": "/admin/apps.html"
+      },
+      {
+        "source": "/admin/shop",
+        "destination": "/admin/shop.html"
+      },
+      {
+        "source": "/admin/shop/**",
+        "destination": "/admin/shop.html"
+      },
+      {
+        "source": "/apps/**",
+        "destination": "/apps/detail.html"
       }
     ]
   }
