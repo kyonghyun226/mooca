@@ -1689,3 +1689,52 @@ h1, h2, h3, h4, p, figure {
 .pub-nav {
   margin-right: auto;
 }
+
+
+/* Goods */
+.pub-goods {
+  padding-block: clamp(4.5rem, 10vw, 7.5rem);
+  background: var(--bg);
+}
+.pub-goods-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.25rem;
+  margin-top: 2.5rem;
+}
+.pub-goods-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+.pub-goods-card .frame {
+  aspect-ratio: 4 / 5;
+  background: var(--bg-deep, #F3F3F3);
+  border: 1px solid var(--line, #E2E1DB);
+  display: grid;
+  place-items: center;
+}
+.pub-goods-name {
+  font-family: var(--font-display, Syne, sans-serif);
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin: 0;
+}
+.pub-goods-desc {
+  margin: 0;
+  color: var(--ink-soft, #4A4A48);
+  font-size: 0.95rem;
+  line-height: 1.55;
+}
+.pub-goods-actions {
+  margin-top: 2.25rem;
+}
+.pub-goods-actions [aria-disabled="true"] {
+  pointer-events: none;
+  opacity: 0.45;
+}
+@media (max-width: 800px) {
+  .pub-goods-grid {
+    grid-template-columns: 1fr;
+  }
+}
