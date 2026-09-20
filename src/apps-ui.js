@@ -14,59 +14,58 @@ export function fillIcon(target, app) {
   target.innerHTML = iconMarkup(app.id)
 }
 
-export function createPublicAppCard(app) {
-  const card = document.createElement('article')
-  card.className = 'app-card'
-  card.dataset.appId = app.id
+const pad = (n) => String(n).padStart(2, '0')
 
-  const icon = document.createElement('div')
-  icon.className = 'card-icon'
-  icon.setAttribute('aria-hidden', 'true')
-  fillIcon(icon, app)
+export function createPublicAppRow(app, index) {
+  const row = document.createElement('li')
+  row.className = 'pub-app-row'
+  row.dataset.appId = app.id
 
-  const title = document.createElement('h3')
-  title.className = 'card-title'
-  title.textContent = app.name
+  const no = document.createElement('span')
+  no.className = 'pub-app-no'
+  no.setAttribute('aria-hidden', 'true')
+  no.textContent = pad(index + 1)
 
-  const body = document.createElement('p')
-  body.className = 'card-body'
-  body.textContent = app.description
+  const info = document.createElement('div')
+  info.className = 'pub-app-info'
 
-  const tags = document.createElement('ul')
+  const name = document.createElement('h3')
+  name.className = 'pub-app-name'
+  name.textContent = app.name
+
+  const desc = document.createElement('p')
+  desc.className = 'app-desc'
+  desc.textContent = app.description
+
+  const tags = document.createElement('p')
   tags.className = 'app-tags'
-  tags.setAttribute('aria-label', '키워드')
-  for (const tag of app.tags ?? []) {
-    const item = document.createElement('li')
-    item.textContent = tag
-    tags.append(item)
-  }
+  tags.textContent = (app.tags ?? []).join(' · ')
 
-  card.append(icon, title, body, tags)
+  info.append(name, desc)
+  if ((app.tags ?? []).length) info.append(tags)
+
+  row.append(no, info)
 
   const ios = app.appStoreUrl?.trim()
   const play = app.googlePlayUrl?.trim()
   if (ios || play) {
-    const downloads = document.createElement('div')
-    downloads.className = 'app-downloads'
-    const label = document.createElement('p')
-    label.className = 'app-downloads-label'
-    label.textContent = '앱 다운로드'
-    downloads.append(label)
-    if (ios) {
-      downloads.append(storeLink('App Store', ios, `${app.name} App Store`))
-    }
-    if (play) {
-      downloads.append(storeLink('Google Play', play, `${app.name} Google Play`))
-    }
-    card.append(downloads)
+    const links = document.createElement('div')
+    links.className = 'pub-app-links'
+    if (ios) links.append(storeLink('App Store', ios, `${app.name} App Store`))
+    if (play) links.append(storeLink('Google Play', play, `${app.name} Google Play`))
+    row.append(links)
   }
 
-  return card
+  return row
+}
+
+/** @deprecated kept for admin preview compatibility */
+export function createPublicAppCard(app) {
+  return createPublicAppRow(app, 0)
 }
 
 const storeLink = (label, href, aria) => {
   const link = document.createElement('a')
-  link.className = 'store-btn'
   link.href = href
   link.textContent = label
   link.setAttribute('aria-label', aria)
