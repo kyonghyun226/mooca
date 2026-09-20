@@ -1782,3 +1782,15 @@ h1, h2, h3, h4, p, figure {
     grid-template-columns: 1fr;
   }
 }
+
+
+.pub-shop-card .frame {
+  position: relative;
+  overflow: hidden;
+}
+.pub-shop-card .frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}

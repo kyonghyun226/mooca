@@ -4,10 +4,16 @@ import { fileURLToPath } from 'node:url'
 
 const root = dirname(fileURLToPath(import.meta.url))
 
-const rewriteAdminApps = (req, _res, next) => {
+const rewriteAdmin = (req, _res, next) => {
   const [pathname, search] = (req.url ?? '').split('?')
-  if (pathname === '/admin/apps' || pathname === '/admin/apps/') {
-    req.url = `/admin/apps.html${search ? `?${search}` : ''}`
+  const map = {
+    '/admin/apps': '/admin/apps.html',
+    '/admin/apps/': '/admin/apps.html',
+    '/admin/shop': '/admin/shop.html',
+    '/admin/shop/': '/admin/shop.html',
+  }
+  if (pathname in map) {
+    req.url = `${map[pathname]}${search ? `?${search}` : ''}`
   }
   next()
 }
@@ -15,12 +21,12 @@ const rewriteAdminApps = (req, _res, next) => {
 export default defineConfig({
   plugins: [
     {
-      name: 'admin-apps-rewrite',
+      name: 'admin-rewrites',
       configureServer(server) {
-        server.middlewares.use(rewriteAdminApps)
+        server.middlewares.use(rewriteAdmin)
       },
       configurePreviewServer(server) {
-        server.middlewares.use(rewriteAdminApps)
+        server.middlewares.use(rewriteAdmin)
       },
     },
   ],
@@ -29,6 +35,7 @@ export default defineConfig({
       input: {
         main: resolve(root, 'index.html'),
         adminApps: resolve(root, 'admin/apps.html'),
+        adminShop: resolve(root, 'admin/shop.html'),
       },
     },
   },

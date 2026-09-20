@@ -377,3 +377,35 @@
     width: 100%;
   }
 }
+
+
+.admin-nav {
+  display: flex;
+  gap: 1rem;
+  margin-right: auto;
+  margin-left: 1.5rem;
+}
+.admin-nav a {
+  color: var(--ink-soft, #4a4a48);
+  text-decoration: none;
+  font-size: 0.9rem;
+}
+.admin-nav a[aria-current="page"] {
+  color: var(--ink, #1a1a1a);
+  font-weight: 600;
+}
+.admin-shop-preview {
+  width: 100%;
+  max-width: 280px;
+  aspect-ratio: 1;
+  overflow: hidden;
+}
+.admin-shop-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.admin-page-head .btn {
+  margin-top: 1rem;
+}

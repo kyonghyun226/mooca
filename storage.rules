@@ -11,7 +11,7 @@ service firebase.storage {
 
     function adminEmails() {
       // TODO: replace with verified admin emails after project bind.
-      return [];
+      return ['kyonghyun226@gmail.com'];
     }
 
     function isAdmin() {
@@ -26,6 +26,18 @@ service firebase.storage {
 
     function isKnownAppId(appId) {
       return appId in ['seesaw', 'pooptime', 'randomdrop', 'banjjak', 'ieum'];
+    }
+
+    match /shop/{fileName} {
+      allow read: if true;
+      allow write: if isAdmin()
+        && fileName.matches('^[^/]+\\.(jpg|jpeg|png|webp)$')
+        && request.resource.size < 4 * 1024 * 1024
+        && request.resource.contentType in [
+          'image/jpeg',
+          'image/png',
+          'image/webp'
+        ];
     }
 
     match /apps/{appId}/{fileName} {

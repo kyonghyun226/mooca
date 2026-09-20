@@ -12,7 +12,7 @@ service cloud.firestore {
 
     function adminEmails() {
       // TODO: replace with verified admin emails after project bind.
-      return [];
+      return ['kyonghyun226@gmail.com'];
     }
 
     function isAdmin() {
@@ -93,6 +93,11 @@ service cloud.firestore {
         && (!('order' in resource.data) || request.resource.data.order == resource.data.order)
         && (!('tags' in resource.data) || request.resource.data.tags == resource.data.tags);
       allow delete: if false;
+    }
+
+    match /shopItems/{itemId} {
+      allow read: if true;
+      allow create, update, delete: if isAdmin();
     }
 
     match /{document=**} {
