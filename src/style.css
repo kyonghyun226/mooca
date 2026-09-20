@@ -1679,3 +1679,13 @@ h1, h2, h3, h4, p, figure {
 .pub-studio-actions {
   margin-top: 1.75rem;
 }
+
+
+/* Header without brand mark — nav leads */
+.pub-header-inner {
+  justify-content: flex-end;
+  gap: 1.5rem;
+}
+.pub-nav {
+  margin-right: auto;
+}
