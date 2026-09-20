@@ -567,13 +567,24 @@ h1, h2, h3, h4, p, figure {
   line-height: 1.6;
 }
 
-.logo--hero-void {
+.pub-logo-plate {
   position: relative;
   z-index: 1;
-  width: min(62%, 240px);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.35rem 1.6rem;
+  background: #FFFFFF;
+  border-radius: 2px;
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.12);
+}
+
+.logo--hero-void {
+  width: min(62vw, 220px);
+  max-width: 220px;
   height: auto;
-  filter: invert(1) brightness(1.05);
-  opacity: 0.92;
+  filter: none;
+  opacity: 1;
 }
 
 .pub-void-idx {
