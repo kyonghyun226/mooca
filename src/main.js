@@ -1,60 +1,107 @@
 import './style.css'
-import heroImg from './assets/hero.png'
-import javascriptLogo from './assets/javascript.svg'
-import viteLogo from './assets/vite.svg'
-import { setupCounter } from './counter.js'
+import { listApps } from './data/apps-repository.js'
+import { createPublicAppRow } from './apps-ui.js'
+import { listShopItems } from './data/shop-repository.js'
 
-document.querySelector('#app').innerHTML = `
-<section id="center">
-  <div class="hero">
-    <img src="${heroImg}" class="base" width="170" height="179">
-    <img src="${javascriptLogo}" class="framework" alt="JavaScript logo"/>
-    <img src="${viteLogo}" class="vite" alt="Vite logo" />
-  </div>
-  <div>
-    <h1>Get started</h1>
-    <p>Edit <code>src/main.js</code> and save to test <code>HMR</code></p>
-  </div>
-  <button id="counter" type="button" class="counter"></button>
-</section>
+const toggle = document.querySelector('[data-menu-toggle]')
+const panel = document.querySelector('[data-mobile-nav]')
+const year = document.querySelector('[data-year]')
+const appsIndex = document.querySelector('[data-apps-index]')
+const appsCount = document.querySelector('[data-apps-count]')
 
-<div class="ticks"></div>
+if (year) {
+  year.textContent = String(new Date().getFullYear())
+}
 
-<section id="next-steps">
-  <div id="docs">
-    <svg class="icon" role="presentation" aria-hidden="true"><use href="/icons.svg#documentation-icon"></use></svg>
-    <h2>Documentation</h2>
-    <p>Your questions, answered</p>
-    <ul>
-      <li>
-        <a href="https://vite.dev/" target="_blank">
-          <img class="logo" src="${viteLogo}" alt="" />
-          Explore Vite
-        </a>
-      </li>
-      <li>
-        <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript" target="_blank">
-          <img class="button-icon" src="${javascriptLogo}" alt="">
-          Learn more
-        </a>
-      </li>
-    </ul>
-  </div>
-  <div id="social">
-    <svg class="icon" role="presentation" aria-hidden="true"><use href="/icons.svg#social-icon"></use></svg>
-    <h2>Connect with us</h2>
-    <p>Join the Vite community</p>
-    <ul>
-      <li><a href="https://github.com/vitejs/vite" target="_blank"><svg class="button-icon" role="presentation" aria-hidden="true"><use href="/icons.svg#github-icon"></use></svg>GitHub</a></li>
-      <li><a href="https://chat.vite.dev/" target="_blank"><svg class="button-icon" role="presentation" aria-hidden="true"><use href="/icons.svg#discord-icon"></use></svg>Discord</a></li>
-      <li><a href="https://x.com/vite_js" target="_blank"><svg class="button-icon" role="presentation" aria-hidden="true"><use href="/icons.svg#x-icon"></use></svg>X.com</a></li>
-      <li><a href="https://bsky.app/profile/vite.dev" target="_blank"><svg class="button-icon" role="presentation" aria-hidden="true"><use href="/icons.svg#bluesky-icon"></use></svg>Bluesky</a></li>
-    </ul>
-  </div>
-</section>
+const setMenuOpen = (open) => {
+  if (!toggle || !panel) return
+  toggle.setAttribute('aria-expanded', String(open))
+  toggle.setAttribute('aria-label', open ? '메뉴 닫기' : '메뉴 열기')
+  panel.hidden = !open
+  document.body.classList.toggle('is-menu-open', open)
+}
 
-<div class="ticks"></div>
-<section id="spacer"></section>
-`
+toggle?.addEventListener('click', () => {
+  const expanded = toggle.getAttribute('aria-expanded') === 'true'
+  setMenuOpen(!expanded)
+})
 
-setupCounter(document.querySelector('#counter'))
+panel?.querySelectorAll('a').forEach((link) => {
+  link.addEventListener('click', () => setMenuOpen(false))
+})
+
+window.addEventListener('keydown', (event) => {
+  if (event.key === 'Escape') setMenuOpen(false)
+})
+
+const renderApps = async () => {
+  if (!appsIndex) return
+  try {
+    const apps = await listApps()
+    appsIndex.replaceChildren(...apps.map((app, i) => createPublicAppRow(app, i)))
+    if (appsCount) {
+      appsCount.textContent = String(apps.length).padStart(2, '0')
+    }
+  } catch (error) {
+    console.error(error)
+    appsIndex.textContent = '앱 목록을 불러오지 못했습니다.'
+  }
+}
+
+renderApps()
+
+
+const shopGrid = document.querySelector('[data-shop-grid]')
+
+const renderShop = async () => {
+  if (!shopGrid) return
+  try {
+    const items = await listShopItems()
+    if (!items.length) {
+      shopGrid.innerHTML = ''
+      for (let i = 0; i < 6; i += 1) {
+        const card = document.createElement('article')
+        card.className = 'pub-shop-card'
+        card.setAttribute('role', 'listitem')
+        const frame = document.createElement('div')
+        frame.className = 'frame'
+        frame.setAttribute('aria-hidden', 'true')
+        const mark = document.createElement('span')
+        mark.className = 'frame-mark'
+        mark.textContent = String(i + 1).padStart(2, '0')
+        frame.append(mark)
+        card.append(frame)
+        shopGrid.append(card)
+      }
+      return
+    }
+    shopGrid.replaceChildren(
+      ...items.map((item, index) => {
+        const card = document.createElement('article')
+        card.className = 'pub-shop-card'
+        card.setAttribute('role', 'listitem')
+        const frame = document.createElement('div')
+        frame.className = 'frame'
+        if (item.imageUrl) {
+          const img = document.createElement('img')
+          img.src = item.imageUrl
+          img.alt = ''
+          img.loading = 'lazy'
+          frame.append(img)
+        } else {
+          const mark = document.createElement('span')
+          mark.className = 'frame-mark'
+          mark.textContent = String(index + 1).padStart(2, '0')
+          frame.append(mark)
+        }
+        card.append(frame)
+        return card
+      }),
+    )
+  } catch (error) {
+    console.error(error)
+    shopGrid.textContent = '굿즈를 불러오지 못했습니다.'
+  }
+}
+
+renderShop()

@@ -1,0 +1,117 @@
+rules_version = '2';
+
+// TODO: Bind a real Firebase project before deploying these rules.
+// Do not invent a project ID. Add verified admin emails to adminEmails()
+// and/or set a custom Auth claim `admin: true` after the project exists.
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function adminEmails() {
+      // TODO: replace with verified admin emails after project bind.
+      return ['kyonghyun226@gmail.com'];
+    }
+
+    function isAdmin() {
+      return isSignedIn()
+        && request.auth.token.email is string
+        && request.auth.token.email_verified == true
+        && (
+          request.auth.token.admin == true
+          || request.auth.token.email in adminEmails()
+        );
+    }
+
+    function isKnownAppId(appId) {
+      return appId in ['seesaw', 'pooptime', 'randomdrop', 'banjjak', 'ieum'];
+    }
+
+    function isValidHttpUrlOrEmpty(value) {
+      return value is string
+        && value.size() <= 4096
+        && (value == '' || value.matches('^https://.+$'));
+    }
+
+    function isWholeOrder(value) {
+      return (value is int || value is float)
+        && value >= 1
+        && value <= 5
+        && value % 1 == 0;
+    }
+
+    function isValidApp(data, appId) {
+      return data.keys().hasAll([
+          'id',
+          'name',
+          'description',
+          'iconUrl',
+          'appStoreUrl',
+          'googlePlayUrl',
+          'order',
+          'updatedAt'
+        ])
+        && data.keys().hasOnly([
+          'id',
+          'name',
+          'description',
+          'iconUrl',
+          'appStoreUrl',
+          'googlePlayUrl',
+          'order',
+          'updatedAt',
+          'updatedBy',
+          'tags',
+          'tagline',
+          'body',
+          'features',
+          'mockupUrls',
+          'galleryCaptions'
+        ])
+        && data.id == appId
+        && data.name is string
+        && data.name.size() > 0
+        && data.name.size() <= 40
+        && data.description is string
+        && data.description.size() > 0
+        && data.description.size() <= 80
+        && isValidHttpUrlOrEmpty(data.iconUrl)
+        && isValidHttpUrlOrEmpty(data.appStoreUrl)
+        && isValidHttpUrlOrEmpty(data.googlePlayUrl)
+        && (!('tagline' in data) || (data.tagline is string && data.tagline.size() <= 60))
+        && (!('body' in data) || (data.body is string && data.body.size() <= 600))
+        && (!('features' in data) || data.features is list)
+        && (!('mockupUrls' in data) || data.mockupUrls is list)
+        && (!('galleryCaptions' in data) || data.galleryCaptions is list)
+        && isWholeOrder(data.order)
+        && data.updatedAt is timestamp
+        && (!('updatedBy' in data) || (data.updatedBy is string && data.updatedBy.size() <= 320))
+        && (!('tags' in data) || (data.tags is list && data.tags.size() <= 8));
+    }
+
+    match /apps/{appId} {
+      allow read: if true;
+      allow create: if isAdmin()
+        && isKnownAppId(appId)
+        && isValidApp(request.resource.data, appId);
+      allow update: if isAdmin()
+        && isKnownAppId(appId)
+        && isValidApp(request.resource.data, appId)
+        && request.resource.data.id == appId
+        && (!('order' in resource.data) || request.resource.data.order == resource.data.order)
+        && (!('tags' in resource.data) || request.resource.data.tags == resource.data.tags);
+      allow delete: if false;
+    }
+
+    match /shopItems/{itemId} {
+      allow read: if true;
+      allow create, update, delete: if isAdmin();
+    }
+
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

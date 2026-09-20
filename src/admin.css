@@ -1,0 +1,551 @@
+/* ============================================================
+   MOOCA Admin — Apps card editor (mockup)
+   Extends ../styles.css tokens; warm monochrome only.
+   ============================================================ */
+
+.admin-body {
+  min-height: 100vh;
+  background: var(--bg);
+}
+
+/* ---------- Admin header ---------- */
+
+.admin-header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: rgba(250, 250, 248, 0.92);
+  backdrop-filter: saturate(140%) blur(12px);
+  -webkit-backdrop-filter: saturate(140%) blur(12px);
+  border-bottom: 1px solid var(--line);
+}
+
+.admin-header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  height: 64px;
+}
+
+.admin-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.logo--admin {
+  width: 96px;
+  height: auto;
+}
+
+.admin-brand-label {
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--ink-muted);
+  letter-spacing: -0.01em;
+  padding-left: 0.75rem;
+  border-left: 1px solid var(--line);
+}
+
+.admin-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--ink-soft);
+  background: var(--bg-soft);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 0.35rem 0.85rem 0.35rem 0.55rem;
+  line-height: 1.3;
+}
+
+.admin-chip-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--ink);
+  opacity: 0.55;
+}
+
+/* ---------- Page shell ---------- */
+
+.admin-main {
+  padding: clamp(2.5rem, 5vw, 3.5rem) 0 clamp(4rem, 8vw, 5.5rem);
+}
+
+.admin-page-head {
+  margin-bottom: 2rem;
+  max-width: 40rem;
+}
+
+.admin-page-title {
+  font-size: clamp(1.5rem, 2.8vw, 1.85rem);
+  font-weight: 650;
+  letter-spacing: -0.025em;
+  line-height: 1.35;
+  color: var(--ink);
+  margin-bottom: 0.65rem;
+}
+
+.admin-page-help {
+  font-size: 0.975rem;
+  color: var(--ink-soft);
+  line-height: 1.7;
+}
+
+.admin-page-help strong {
+  font-weight: 600;
+  color: var(--ink);
+}
+
+/* ---------- Editor list ---------- */
+
+.admin-apps-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  max-width: 760px;
+}
+
+.admin-app-card {
+  background: var(--white);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-soft);
+  padding: 1.5rem 1.5rem 1.35rem;
+}
+
+.admin-app-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+  padding-bottom: 0.9rem;
+  border-bottom: 1px solid var(--line);
+}
+
+.admin-app-order {
+  font-size: 0.6875rem;
+  font-weight: 650;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+}
+
+.admin-app-id {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--ink-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- Form fields ---------- */
+
+.admin-fields {
+  display: grid;
+  gap: 1.1rem;
+}
+
+.admin-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.admin-field-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.admin-label {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--ink-soft);
+}
+
+.admin-hint {
+  font-size: 0.75rem;
+  color: var(--ink-muted);
+  margin-top: -0.15rem;
+}
+
+.admin-input,
+.admin-textarea {
+  width: 100%;
+  font-family: inherit;
+  font-size: 0.9375rem;
+  color: var(--ink);
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  padding: 0.7rem 0.85rem;
+  line-height: 1.45;
+  transition: border-color 0.2s var(--ease), background 0.2s var(--ease);
+}
+
+.admin-input::placeholder,
+.admin-textarea::placeholder {
+  color: var(--ink-muted);
+  opacity: 0.85;
+}
+
+.admin-input:hover,
+.admin-textarea:hover {
+  border-color: #CFCEC8;
+}
+
+.admin-input:focus,
+.admin-textarea:focus {
+  outline: none;
+  border-color: var(--ink);
+  background: var(--white);
+}
+
+.admin-textarea {
+  resize: vertical;
+  min-height: 2.75rem;
+  max-height: 6rem;
+}
+
+/* ---------- Icon upload (visual) ---------- */
+
+.admin-icon-row {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.admin-icon-preview {
+  width: 64px;
+  height: 64px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 14px;
+  background: var(--bg-soft);
+  border: 1px solid var(--line);
+  color: var(--ink);
+  overflow: hidden;
+}
+
+.admin-icon-preview svg {
+  width: 36px;
+  height: 36px;
+}
+
+.admin-icon-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.admin-icon-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  align-items: flex-start;
+}
+
+.btn--ghost {
+  background: var(--white);
+  color: var(--ink);
+  border-color: var(--line);
+  padding: 0.55rem 1rem;
+  font-size: 0.8125rem;
+}
+
+.btn--ghost:hover,
+.btn--ghost:focus-visible {
+  border-color: var(--ink);
+  background: var(--bg);
+  transform: none;
+}
+
+.admin-icon-note {
+  font-size: 0.6875rem;
+  color: var(--ink-muted);
+  letter-spacing: -0.01em;
+}
+
+/* ---------- Card footer / save ---------- */
+
+.admin-card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  margin-top: 1.25rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--line);
+}
+
+.admin-save-status {
+  font-size: 0.75rem;
+  color: var(--ink-muted);
+  margin-right: auto;
+}
+
+.btn--save {
+  min-width: 5.5rem;
+}
+
+/* ---------- Footer note ---------- */
+
+.admin-auth {
+  max-width: 760px;
+  margin-bottom: 1.5rem;
+  padding: 1.5rem;
+  background: var(--white);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-soft);
+}
+
+.admin-auth[hidden] {
+  display: none;
+}
+
+.admin-auth-form {
+  display: grid;
+  gap: 0.65rem;
+  max-width: 24rem;
+  margin-top: 1rem;
+}
+
+.btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.admin-footer-note {
+  margin-top: 2.5rem;
+  max-width: 760px;
+  padding: 1rem 1.15rem;
+  background: var(--bg-soft);
+  border: 1px dashed var(--line);
+  border-radius: var(--radius-sm);
+  font-size: 0.8125rem;
+  color: var(--ink-muted);
+  line-height: 1.65;
+}
+
+.admin-footer-note code {
+  font-size: 0.78em;
+  background: var(--white);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  padding: 0.1em 0.35em;
+  color: var(--ink-soft);
+}
+
+/* ---------- Responsive ---------- */
+
+@media (max-width: 640px) {
+  .admin-field-row {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-brand-label {
+    display: none;
+  }
+
+  .admin-app-card {
+    padding: 1.25rem 1.15rem 1.15rem;
+  }
+
+  .admin-card-footer {
+    flex-wrap: wrap;
+  }
+
+  .admin-save-status {
+    width: 100%;
+    margin-right: 0;
+    margin-bottom: 0.25rem;
+  }
+
+  .btn--save {
+    width: 100%;
+  }
+}
+
+
+.admin-nav {
+  display: flex;
+  gap: 1rem;
+  margin-right: auto;
+  margin-left: 1.5rem;
+}
+.admin-nav a {
+  color: var(--ink-soft, #4a4a48);
+  text-decoration: none;
+  font-size: 0.9rem;
+}
+.admin-nav a[aria-current="page"] {
+  color: var(--ink, #1a1a1a);
+  font-weight: 600;
+}
+.admin-shop-preview {
+  width: 100%;
+  max-width: 280px;
+  aspect-ratio: 1;
+  overflow: hidden;
+}
+.admin-shop-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.admin-page-head .btn {
+  margin-top: 1rem;
+}
+
+/* ---------- App detail accordion ---------- */
+
+.admin-detail-acc {
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: var(--bg-soft, var(--bg));
+  margin-top: 0.35rem;
+}
+
+.admin-detail-summary {
+  list-style: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.85rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 650;
+  color: var(--ink);
+  user-select: none;
+}
+
+.admin-detail-summary::-webkit-details-marker {
+  display: none;
+}
+
+.admin-detail-summary::after {
+  content: "+";
+  font-family: var(--font-serif, Georgia, serif);
+  font-size: 1.15rem;
+  font-weight: 400;
+  color: var(--ink-muted);
+  line-height: 1;
+}
+
+.admin-detail-acc[open] > .admin-detail-summary::after {
+  content: "−";
+}
+
+.admin-detail-hint {
+  font-size: 0.75rem;
+  font-weight: 450;
+  color: var(--ink-muted);
+  margin-right: auto;
+  margin-left: 0.75rem;
+}
+
+.admin-detail-panel {
+  display: grid;
+  gap: 1.1rem;
+  padding: 0 1rem 1.15rem;
+  border-top: 1px solid var(--line);
+  padding-top: 1.1rem;
+}
+
+.admin-textarea--lg {
+  min-height: 6.5rem;
+  max-height: 14rem;
+  line-height: 1.6;
+}
+
+.admin-fieldset {
+  border: 0;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 0.75rem;
+}
+
+.admin-label--sub {
+  font-weight: 500;
+  font-size: 0.75rem;
+  color: var(--ink-muted);
+}
+
+.admin-mockup-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.75rem;
+}
+
+.admin-mockup-slot {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0.5rem;
+}
+
+.admin-mockup-preview {
+  aspect-ratio: 3 / 4;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg);
+  border: 1px dashed var(--line);
+  border-radius: var(--radius-sm);
+  color: var(--ink-muted);
+  font-family: Georgia, "Instrument Serif", serif;
+  font-style: italic;
+  font-size: 1.5rem;
+}
+
+.admin-mockup-slot .btn--ghost {
+  width: 100%;
+  justify-content: center;
+  padding: 0.45rem 0.5rem;
+  font-size: 0.75rem;
+}
+
+.admin-field-row--3 {
+  grid-template-columns: 1fr 1fr 1fr;
+}
+
+.admin-detail-preview-link {
+  font-size: 0.8125rem;
+  color: var(--ink-muted);
+}
+
+.admin-detail-preview-link a {
+  color: var(--ink);
+  border-bottom: 1px solid var(--line);
+}
+
+.admin-detail-preview-link a:hover {
+  border-bottom-color: var(--ink);
+}
+
+@media (max-width: 640px) {
+  .admin-mockup-grid,
+  .admin-field-row--3 {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-detail-hint {
+    display: none;
+  }
+}
+

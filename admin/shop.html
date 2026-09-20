@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/png" href="/logo.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#FAFAF8" />
+    <title>굿즈 목록 관리 — MOOCA Admin</title>
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css"
+    />
+  </head>
+  <body class="admin-body">
+    <header class="admin-header">
+      <div class="container admin-header-inner">
+        <div class="admin-brand">
+          <a href="/" class="logo-link" aria-label="MOOCA 랜딩으로">
+            <img class="logo logo--admin" src="/logo.png" alt="MOOCA" width="96" height="32" />
+          </a>
+          <span class="admin-brand-label">Admin</span>
+        </div>
+        <nav class="admin-nav" aria-label="관리 메뉴">
+          <a href="/admin/apps">앱</a>
+          <a href="/admin/shop" aria-current="page">굿즈</a>
+        </nav>
+        <span class="admin-chip" data-admin-chip>
+          <span class="admin-chip-dot" aria-hidden="true"></span>
+          <span data-admin-chip-label>로컬</span>
+        </span>
+      </div>
+    </header>
+
+    <main class="admin-main">
+      <div class="container">
+        <header class="admin-page-head">
+          <h1 class="admin-page-title">굿즈 목록 관리</h1>
+          <p class="admin-page-help">
+            공개 랜딩 <strong>스토어</strong> 섹션의 이미지 프레임을 추가·교체·삭제합니다.
+            상품명은 공개 페이지에 표시되지 않습니다. 스토어 링크는 스마트스토어로 고정됩니다.
+          </p>
+          <button class="btn btn--primary" type="button" data-shop-add>굿즈 추가</button>
+        </header>
+
+        <section class="admin-auth" data-admin-auth hidden>
+          <h2 class="admin-page-title">관리자 로그인</h2>
+          <p class="admin-page-help">Firebase가 연결되면 이메일로 로그인해야 저장할 수 있습니다.</p>
+          <form class="admin-auth-form" data-admin-login>
+            <label class="admin-label" for="admin-email">이메일</label>
+            <input class="admin-input" id="admin-email" name="email" type="email" autocomplete="username" required />
+            <label class="admin-label" for="admin-password">비밀번호</label>
+            <input
+              class="admin-input"
+              id="admin-password"
+              name="password"
+              type="password"
+              autocomplete="current-password"
+              required
+            />
+            <button class="btn btn--primary" type="submit">로그인</button>
+            <p class="admin-save-status" data-admin-login-status></p>
+          </form>
+        </section>
+
+        <div class="admin-apps-list" role="list" data-admin-list></div>
+
+        <p class="admin-footer-note">
+          Firebase 미연결 시 localStorage에 저장됩니다. 연결 후에는 Firestore
+          <code>shopItems</code>와 Storage <code>shop/{id}.*</code>를 사용합니다.
+        </p>
+      </div>
+    </main>
+
+    <script type="module" src="/src/admin-shop.js"></script>
+  </body>
+</html>
