@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/png" href="/logo.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#FAFAF8" />
+    <title>스튜디오 사진 관리 — MOOCA Admin</title>
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css"
+    />
+  </head>
+  <body class="admin-body">
+    <header class="admin-header">
+      <div class="container admin-header-inner">
+        <div class="admin-brand">
+          <a href="/" class="logo-link" aria-label="MOOCA 랜딩으로">
+            <img class="logo logo--admin" src="/logo.png" alt="MOOCA" width="96" height="32" />
+          </a>
+          <span class="admin-brand-label">Admin</span>
+        </div>
+        <nav class="admin-nav" aria-label="관리 메뉴">
+          <a href="/admin/apps">앱</a>
+          <a href="/admin/shop">굿즈</a>
+          <a href="/admin/studio" aria-current="page">스튜디오</a>
+        </nav>
+        <span class="admin-chip" data-admin-chip>
+          <span class="admin-chip-dot" aria-hidden="true"></span>
+          <span data-admin-chip-label>로컬</span>
+        </span>
+      </div>
+    </header>
+
+    <main class="admin-main">
+      <div class="container">
+        <header class="admin-page-head admin-page-head--row">
+          <div>
+            <h1 class="admin-page-title">스튜디오 사진 관리</h1>
+            <p class="admin-page-help">
+              공개 랜딩 <strong>Studio</strong> 섹션의 공간 갤러리에 표시됩니다.
+              업로드 · 교체 · 순서 · 삭제 후 저장하세요. (스튜디오 내부 사진만 · v1)
+            </p>
+          </div>
+          <button type="button" class="btn btn--primary btn--sm" data-add-photo>사진 추가</button>
+        </header>
+
+        <section class="admin-auth" data-admin-auth hidden>
+          <h2 class="admin-page-title">관리자 로그인</h2>
+          <p class="admin-page-help">Firebase가 연결되면 이메일로 로그인해야 저장할 수 있습니다.</p>
+          <form class="admin-auth-form" data-admin-login>
+            <label class="admin-label" for="admin-email">이메일</label>
+            <input class="admin-input" id="admin-email" name="email" type="email" autocomplete="username" required />
+            <label class="admin-label" for="admin-password">비밀번호</label>
+            <input
+              class="admin-input"
+              id="admin-password"
+              name="password"
+              type="password"
+              autocomplete="current-password"
+              required
+            />
+            <button class="btn btn--primary" type="submit">로그인</button>
+            <p class="admin-save-status" data-admin-login-status></p>
+          </form>
+        </section>
+
+        <div class="admin-studio-list" role="list" data-admin-list></div>
+
+        <div class="admin-empty" data-studio-empty hidden>
+          <p class="admin-empty-title">등록된 스튜디오 사진이 없습니다</p>
+          <p class="admin-empty-body">「사진 추가」로 내부 공간 사진을 올려 주세요. 공개 Studio 갤러리에 표시됩니다.</p>
+          <button type="button" class="btn btn--primary btn--sm" data-add-photo>사진 추가</button>
+        </div>
+
+        <p class="admin-footer-note">
+          Firestore 컬렉션 <code>studioPhotos</code>(order 오름차순)와 Storage 경로
+          <code>studio/{photoId}.{ext}</code>(JPG/PNG/WebP · 8MB 이하)를 사용합니다.
+          저장 즉시 Firestore에 반영되며, 공개 페이지는 새로고침 시 표시됩니다.
+          v1 범위: 스튜디오 내부 사진만 (Apps 필드·포트폴리오·Hero 제외).
+        </p>
+      </div>
+    </main>
+
+    <script type="module" src="/src/admin-studio.js"></script>
+  </body>
+</html>

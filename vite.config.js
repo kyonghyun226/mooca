@@ -11,6 +11,8 @@ const rewriteAdmin = (req, _res, next) => {
     '/admin/apps/': '/admin/apps.html',
     '/admin/shop': '/admin/shop.html',
     '/admin/shop/': '/admin/shop.html',
+    '/admin/studio': '/admin/studio.html',
+    '/admin/studio/': '/admin/studio.html',
   }
   if (pathname in map) {
     req.url = `${map[pathname]}${search ? `?${search}` : ''}`
@@ -42,6 +44,7 @@ export default defineConfig({
         main: resolve(root, 'index.html'),
         adminApps: resolve(root, 'admin/apps.html'),
         adminShop: resolve(root, 'admin/shop.html'),
+        adminStudio: resolve(root, 'admin/studio.html'),
         appDetail: resolve(root, 'apps/detail.html'),
       },
     },
