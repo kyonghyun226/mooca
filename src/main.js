@@ -2,6 +2,7 @@ import './style.css'
 import { listApps } from './data/apps-repository.js'
 import { createPublicAppRow } from './apps-ui.js'
 import { listShopItems } from './data/shop-repository.js'
+import { listStudioPhotos } from './data/studio-repository.js'
 
 const toggle = document.querySelector('[data-menu-toggle]')
 const panel = document.querySelector('[data-mobile-nav]')
@@ -105,3 +106,42 @@ const renderShop = async () => {
 }
 
 renderShop()
+
+// Studio · Space lookbook — reads Firestore `studioPhotos` (order asc).
+// 0 photos → keep the static placeholder frames in index.html.
+const lookbook = document.querySelector('[data-studio-lookbook]')
+const LB_SLOTS = ['a', 'b', 'c', 'd', 'e', 'f']
+
+const renderStudioPhotos = async () => {
+  if (!lookbook) return
+  const photos = (await listStudioPhotos()).filter((p) => p.imageUrl)
+  if (!photos.length) return
+  lookbook.replaceChildren(
+    ...photos.map((photo, index) => {
+      const fig = document.createElement('figure')
+      const slot = LB_SLOTS[index]
+      fig.className = slot ? `pub-lb pub-lb--${slot}` : 'pub-lb'
+      fig.setAttribute('role', 'listitem')
+      const frame = document.createElement('div')
+      frame.className = 'frame frame--photo'
+      const img = document.createElement('img')
+      img.src = photo.imageUrl
+      img.alt = photo.caption || '무카 스튜디오 내부'
+      img.loading = 'lazy'
+      img.decoding = 'async'
+      frame.append(img)
+      fig.append(frame)
+      if (photo.caption) {
+        const cap = document.createElement('figcaption')
+        cap.className = 'pub-lb-cap'
+        const num = document.createElement('em')
+        num.textContent = String(index + 1).padStart(2, '0')
+        cap.append(num, ` ${photo.caption}`)
+        fig.append(cap)
+      }
+      return fig
+    }),
+  )
+}
+
+renderStudioPhotos()

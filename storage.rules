@@ -1,8 +1,5 @@
 rules_version = '2';
 
-// TODO: Bind a real Firebase project before deploying these rules.
-// Do not invent a project ID. Admin identity matches firestore.rules.
-
 service firebase.storage {
   match /b/{bucket}/o {
     function isSignedIn() {
@@ -10,22 +7,32 @@ service firebase.storage {
     }
 
     function adminEmails() {
-      // TODO: replace with verified admin emails after project bind.
       return ['kyonghyun226@gmail.com'];
     }
 
     function isAdmin() {
       return isSignedIn()
-        && request.auth.token.email is string
-        && request.auth.token.email_verified == true
         && (
           request.auth.token.admin == true
-          || request.auth.token.email in adminEmails()
+          || (
+            request.auth.token.email is string
+            && request.auth.token.email in adminEmails()
+            && (
+              request.auth.token.email_verified == true
+              || request.auth.token.firebase.sign_in_provider == 'password'
+            )
+          )
         );
     }
 
     function isKnownAppId(appId) {
       return appId in ['seesaw', 'pooptime', 'randomdrop', 'banjjak', 'ieum'];
+    }
+
+    function isImageUpload(maxBytes) {
+      return request.resource == null
+        || (request.resource.size < maxBytes
+          && request.resource.contentType in ['image/jpeg', 'image/png', 'image/webp']);
     }
 
     match /shop/{fileName} {
@@ -38,6 +45,14 @@ service firebase.storage {
           'image/png',
           'image/webp'
         ];
+      allow delete: if isAdmin();
+    }
+
+    match /studio/{fileName} {
+      allow read: if true;
+      allow write: if isAdmin()
+        && fileName.matches('^[^/]+\\.(jpg|jpeg|png|webp)$')
+        && isImageUpload(8 * 1024 * 1024);
     }
 
     match /apps/{appId}/{fileName} {
